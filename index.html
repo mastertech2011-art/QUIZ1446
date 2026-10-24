@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>تجميعات الحاسب 1446</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Readex+Pro:wght@500;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: a single exam-booklet column; questions answered on OMR-style bubble rows */
+:root{
+  --paper:#EEF1F4; --card:#FFFFFF; --ink:#16202B; --muted:#5A6774; --line:#D3DAE2;
+  --accent:#1D5A8A; --accent-soft:#E3EDF6; --ok:#1C7A4B; --ok-soft:#E2F3EA; --bad:#B4412D; --bad-soft:#F8E6E2;
+  --display:"Readex Pro","IBM Plex Sans Arabic",Tahoma,sans-serif;
+  --body:"IBM Plex Sans Arabic","Segoe UI",Tahoma,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#0F151B; --card:#17202A; --ink:#E5EAF0; --muted:#93A1AE; --line:#2A3644;
+  --accent:#74AEE0; --accent-soft:#1C2E40; --ok:#4FC48C; --ok-soft:#143326; --bad:#F2806A; --bad-soft:#3A1F1A; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#0F151B; --card:#17202A; --ink:#E5EAF0; --muted:#93A1AE; --line:#2A3644;
+  --accent:#74AEE0; --accent-soft:#1C2E40; --ok:#4FC48C; --ok-soft:#143326; --bad:#F2806A; --bad-soft:#3A1F1A; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.7;direction:rtl;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px}
+.wrap{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+header{display:flex;flex-direction:column;gap:4px;padding-block:8px 4px;border-bottom:2px solid var(--ink)}
+.eyebrow{font-size:13px;color:var(--muted);letter-spacing:.02em}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(26px,5vw,36px);line-height:1.25;margin:0;text-wrap:balance}
+h1 b{color:var(--accent);font-weight:700}
+h2{font-family:var(--display);font-size:20px;margin:0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:20px}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.btn{border:1px solid var(--accent);background:var(--accent);color:var(--card);border-radius:8px;padding:10px 20px;font-weight:600}
+.btn.ghost{background:transparent;color:var(--accent)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.label{font-size:13px;font-weight:600;color:var(--muted)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{border:0;background:transparent;color:var(--ink);padding:8px 16px}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--card)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:6px 14px;font-size:14px;display:inline-flex;gap:6px;align-items:center}
+.chip .n{font-variant-numeric:tabular-nums;color:var(--muted);font-size:12px}
+.chip[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}
+.setup{display:flex;flex-direction:column;gap:18px}
+.field{display:flex;flex-direction:column;gap:8px}
+.hint{font-size:14px;color:var(--muted);margin:0}
+/* quiz */
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;font-variant-numeric:tabular-nums}
+.progress{height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.progress i{display:block;height:100%;background:var(--accent);transition:width .25s}
+.tag{font-size:12px;font-weight:600;color:var(--accent);background:var(--accent-soft);border-radius:4px;padding:2px 8px}
+.qnum{font-family:var(--display);font-size:14px;color:var(--muted)}
+.qtext{font-family:var(--display);font-weight:500;font-size:clamp(19px,3.6vw,23px);line-height:1.6;margin:6px 0 14px;text-wrap:pretty}
+.blank{display:inline-block;min-width:3.5em;border-bottom:2px dashed var(--muted);margin-inline:4px;transform:translateY(-4px)}
+.ltr{direction:ltr;unicode-bidi:isolate;font-family:var(--mono);font-size:.92em}
+.fig{display:flex;justify-content:center;margin:4px 0 16px;color:var(--ink);overflow-x:auto}
+.fig svg{max-width:100%;height:auto}
+pre.code{direction:ltr;text-align:left;font-family:var(--mono);font-size:14px;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:12px 16px;overflow-x:auto;margin:0 0 16px;line-height:1.6}
+.opts{display:flex;flex-direction:column;gap:10px;list-style:none;margin:0;padding:0}
+.opt{width:100%;display:flex;align-items:center;gap:14px;text-align:right;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:10px 14px;min-height:52px;transition:border-color .15s,background .15s}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.bub{flex:0 0 30px;height:30px;border-radius:50%;border:2px solid var(--muted);display:grid;place-items:center;font-family:var(--display);font-size:14px;color:var(--muted)}
+.otext{flex:1;min-width:0;font-size:17px}
+.opt.sel{border-color:var(--accent);background:var(--accent-soft)}
+.opt.sel .bub{background:var(--accent);border-color:var(--accent);color:var(--card)}
+.opt.right{border-color:var(--ok);background:var(--ok-soft)}
+.opt.right .bub{background:var(--ok);border-color:var(--ok);color:var(--card)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.opt.wrong .bub{background:var(--bad);border-color:var(--bad);color:var(--card)}
+.opt:disabled{cursor:default}
+.fb{margin-top:16px;border-radius:8px;padding:14px 16px;border:1px solid var(--line);background:var(--paper)}
+.fb strong{display:block;font-family:var(--display);margin-bottom:4px}
+.fb.ok strong{color:var(--ok)} .fb.no strong{color:var(--bad)}
+.fb p{margin:0}
+.nav{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.map{display:flex;flex-wrap:wrap;gap:6px}
+.map button{width:32px;height:32px;border-radius:6px;border:1px solid var(--line);background:var(--card);color:var(--muted);font-size:13px;font-variant-numeric:tabular-nums;padding:0}
+.map button.done{background:var(--accent-soft);color:var(--accent);border-color:var(--accent-soft)}
+.map button.g{background:var(--ok-soft);color:var(--ok);border-color:var(--ok-soft)}
+.map button.b{background:var(--bad-soft);color:var(--bad);border-color:var(--bad-soft)}
+.map button.cur{border:2px solid var(--ink);color:var(--ink)}
+/* matrix */
+.mx{display:inline-grid;grid-template-columns:auto auto;gap:2px 16px;padding:4px 10px;border-inline:2px solid currentColor;border-radius:6px;direction:ltr;font-family:var(--mono);font-size:16px;text-align:center}
+/* results */
+.score{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.score .big{font-family:var(--display);font-size:56px;font-weight:700;line-height:1;font-variant-numeric:tabular-nums}
+.score .of{color:var(--muted);font-size:18px}
+.verdict{font-family:var(--display);font-size:18px;margin:6px 0 0}
+.bars{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+.bar{display:grid;grid-template-columns:minmax(0,170px) 1fr 52px;gap:10px;align-items:center;font-size:14px}
+.bar .t{min-width:0}
+.bar .track{height:10px;background:var(--line);border-radius:5px;overflow:hidden}
+.bar .track i{display:block;height:100%;background:var(--accent)}
+.bar .v{font-variant-numeric:tabular-nums;color:var(--muted);text-align:left}
+.rev{display:flex;flex-direction:column;gap:12px;list-style:none;padding:0;margin:0}
+.rev li{border:1px solid var(--line);border-radius:8px;padding:14px 16px;background:var(--card)}
+.rev .q{font-weight:600;margin:0 0 6px}
+.rev .a{font-size:15px;margin:0}
+.rev .a .bad{color:var(--bad);font-weight:600} .rev .a .good{color:var(--ok);font-weight:600}
+.rev .e{font-size:14px;color:var(--muted);margin:6px 0 0}
+footer{font-size:13px;color:var(--muted);text-align:center}
+@media (max-width:480px){.bar{grid-template-columns:minmax(0,1fr) 44px}.bar .track{grid-column:1/-1;order:3}.card{padding:16px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <span class="eyebrow">الرخصة المهنية · تخصص الحاسب الآلي</span>
+    <h1>تجميعات الحاسب <b>1446</b></h1>
+  </header>
+
+  <!-- SETUP -->
+  <section id="setup" class="card setup" aria-label="إعداد الاختبار">
+    <p class="hint" style="color:var(--ink);font-size:16px">49 سؤالًا من تجميعات 1446، لكل سؤال شرح مختصر يوضّح سبب الإجابة. اختاري طريقة التدريب وابدئي.</p>
+    <div class="field">
+      <span class="label">طريقة الحل</span>
+      <div class="seg" role="group" aria-label="طريقة الحل">
+        <button id="m-practice" aria-pressed="true">تدريب: تصحيح فوري</button>
+        <button id="m-exam" aria-pressed="false">اختبار: النتيجة في النهاية</button>
+      </div>
+    </div>
+    <div class="field">
+      <span class="label">عدد الأسئلة</span>
+      <div class="seg" role="group" aria-label="عدد الأسئلة" id="countSeg">
+        <button data-c="0" aria-pressed="true">الكل</button>
+        <button data-c="25" aria-pressed="false">25</button>
+        <button data-c="10" aria-pressed="false">10</button>
+      </div>
+    </div>
+    <div class="field">
+      <span class="label">المحاور</span>
+      <div class="chips" id="topics"></div>
+      <p class="hint" id="poolNote"></p>
+    </div>
+    <div class="row">
+      <label class="row" style="gap:8px"><input type="checkbox" id="shuffle" checked> ترتيب عشوائي للأسئلة والخيارات</label>
+    </div>
+    <div class="row">
+      <button class="btn" id="startBtn">ابدئي الاختبار</button>
+      <span class="hint" id="best"></span>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="quiz" hidden aria-live="polite">
+    <div class="card" style="display:flex;flex-direction:column;gap:12px">
+      <div class="topbar">
+        <span class="qnum" id="qnum"></span>
+        <span class="row" style="gap:12px"><span class="tag" id="qtag"></span><span class="qnum" id="live"></span></span>
+      </div>
+      <div class="progress"><i id="prog"></i></div>
+      <div>
+        <p class="qtext" id="qtext"></p>
+        <div id="qextra"></div>
+        <ul class="opts" id="opts"></ul>
+        <div id="fb"></div>
+      </div>
+      <div class="nav">
+        <button class="btn ghost" id="prevBtn">السابق</button>
+        <div class="row">
+          <button class="btn ghost" id="endBtn">إنهاء وعرض النتيجة</button>
+          <button class="btn" id="nextBtn">التالي</button>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:14px">
+      <span class="label">خريطة الأسئلة</span>
+      <div class="map" id="map" style="margin-top:8px"></div>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section id="result" hidden>
+    <div class="card" style="display:flex;flex-direction:column;gap:16px">
+      <div>
+        <span class="label">النتيجة</span>
+        <div class="score"><span class="big" id="rScore"></span><span class="of" id="rOf"></span></div>
+        <p class="verdict" id="rVerdict"></p>
+      </div>
+      <div>
+        <span class="label">حسب المحور</span>
+        <div class="bars" id="rBars"></div>
+      </div>
+      <div class="row">
+        <button class="btn" id="retryWrong">تدرّبي على الأخطاء فقط</button>
+        <button class="btn ghost" id="retryAll">إعادة الاختبار</button>
+        <button class="btn ghost" id="toSetup">العودة للبداية</button>
+      </div>
+    </div>
+    <div style="margin-top:18px;display:flex;flex-direction:column;gap:10px">
+      <h2 id="revTitle">مراجعة الأخطاء</h2>
+      <ul class="rev" id="rev"></ul>
+    </div>
+  </section>
+
+  <footer>المصدر: محاضرة شرح تجميعات 1446 — الرخصة المهنية (الحاسب الآلي)</footer>
+</div>
+
+<script>
+const TOPICS={net:"الشبكات",hw:"العتاد ونظم التشغيل",logic:"المنطق الرقمي",num:"نظم الأعداد والرياضيات",prog:"البرمجة وهياكل البيانات",db:"قواعد البيانات",app:"التطبيقات والوسائط",edu:"التدريس والتعلم الإلكتروني",sec:"أمن المعلومات والمنظمات"};
+const L=s=>`<span class="ltr">${s}</span>`;
+const M=(a,b,c,d)=>`<span class="mx"><span>${a}</span><span>${b}</span><span>${c}</span><span>${d}</span></span>`;
+
+const FIG={
+xnor:`<svg viewBox="0 0 230 100" width="230" direction="ltr" aria-label="رمز بوابة منطقية" fill="none" stroke="currentColor" stroke-width="2.5">
+<path d="M70 15 Q112 15 150 50 Q112 85 70 85 Q88 50 70 15 Z"/><path d="M60 15 Q78 50 60 85"/>
+<circle cx="157" cy="50" r="6"/><path d="M14 35 H72 M14 65 H72 M163 50 H212"/>
+<g fill="currentColor" stroke="none" font-family="IBM Plex Mono,monospace" font-size="15"><text x="0" y="40">A</text><text x="0" y="70">B</text><text x="216" y="55">Y</text></g></svg>`,
+halfsub:`<svg viewBox="0 0 370 175" width="370" direction="ltr" aria-label="دائرة منطقية" fill="none" stroke="currentColor" stroke-width="2.2">
+<path d="M180 25 Q220 25 255 55 Q220 85 180 85 Q195 55 180 25 Z"/><path d="M171 25 Q186 55 171 85"/>
+<path d="M30 40 H186 M30 70 H186 M255 55 H325"/>
+<path d="M95 40 V125 H122"/><path d="M122 113 L150 125 L122 137 Z"/><circle cx="155" cy="125" r="5"/><path d="M160 125 H205"/>
+<path d="M60 70 V150 H205"/><path d="M205 110 H228 A27 27 0 0 1 228 164 H205 Z"/><path d="M255 137 H325"/>
+<g fill="currentColor" stroke="none"><circle cx="95" cy="40" r="4"/><circle cx="60" cy="70" r="4"/>
+<g font-family="IBM Plex Mono,monospace" font-size="15"><text x="10" y="45">A</text><text x="10" y="75">B</text><text x="330" y="60">D</text><text x="330" y="142">B₀</text></g></g></svg>`,
+star:(()=>{let s=`<svg viewBox="0 0 300 240" width="300" aria-label="مخطط شبكة" fill="none" stroke="currentColor" stroke-width="2">`;const cx=150,cy=120;for(let i=0;i<8;i++){const a=i*Math.PI/4+Math.PI/8,x=cx+Math.cos(a)*105,y=cy+Math.sin(a)*90;s+=`<path d="M${cx} ${cy} L${x.toFixed(1)} ${y.toFixed(1)}" stroke-opacity=".55"/><rect x="${(x-15).toFixed(1)}" y="${(y-11).toFixed(1)}" width="30" height="20" rx="2" fill="var(--card)"/><path d="M${(x-7).toFixed(1)} ${(y+13).toFixed(1)} H${(x+7).toFixed(1)}"/>`}s+=`<rect x="122" y="111" width="56" height="18" rx="3" fill="var(--accent-soft)"/><g fill="currentColor" stroke="none">${[0,1,2,3,4,5].map(k=>`<circle cx="${131+k*8}" cy="120" r="2"/>`).join("")}</g></svg>`;return s})(),
+linked:`<svg viewBox="0 0 400 90" width="400" direction="ltr" aria-label="قائمة مترابطة" fill="none" stroke="currentColor" stroke-width="2">
+${[0,1,2].map(i=>{const x=10+i*120;return `<rect x="${x}" y="30" width="50" height="34"/><rect x="${x+50}" y="30" width="38" height="34" fill="var(--accent)" fill-opacity=".85"/><text x="${x+25}" y="53" fill="currentColor" stroke="none" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="15">${i+1}</text><text x="${x}" y="22" fill="currentColor" stroke="none" font-family="IBM Plex Mono,monospace" font-size="11" opacity=".7">Node ${i+1}</text><path d="M${x+75} 47 H${x+118}"/><path d="M${x+112} 42 L${x+119} 47 L${x+112} 52"/>`}).join("")}
+<text x="372" y="52" fill="currentColor" stroke="none" font-family="IBM Plex Mono,monospace" font-size="12">NULL</text></svg>`,
+dashed:`<svg viewBox="0 0 220 90" width="220" aria-label="رمز في مخطط الكيان والعلاقة" fill="none" stroke="currentColor" stroke-width="2.5"><ellipse cx="110" cy="45" rx="95" ry="32" stroke-dasharray="10 7"/></svg>`
+};
+
+const Q=[
+{t:"sec",q:"…… هي منظمة أمريكية للتقنية تجمع العلماء ومهندسي الكهرباء والإلكترونيات",o:["ACM","ISM","IEEE","ISO"],a:2,e:"IEEE هو معهد مهندسي الكهرباء والإلكترونيات، أكبر مجتمع مهني في العالم. من أشهر معاييره IEEE 802 للشبكات المحلية."},
+{t:"sec",q:"…… أول رابطة علمية وتعليمية للحوسبة في العالم",o:["IEEE","ISO","ISM","ACM"],a:3,e:"ACM = Association for Computing Machinery. تهتم بالحوسبة نفسها: مؤتمرات ومسابقات ومجلات، ولا تركّز على وضع المعايير."},
+{t:"sec",q:"…… هي المنظمة الدولية للمعايير، وتعمل على وضع المعايير التجارية والصناعية العالمية",o:["IEEE","ISO","ISM","ACM"],a:1,e:"ISO معاييرها عامة تشمل كل الصناعات، أما IEEE فمتخصصة في الكهرباء والإلكترونيات والحاسب."},
+{t:"app",q:"أي من التالي يُعد امتدادًا لملفات الصوت؟",o:["DOS","JAVA","GUI","WAV"],a:3,e:"WAV ملف صوتي. DOS نظام تشغيل، Java لغة برمجة، GUI واجهة رسومية."},
+{t:"net",q:"أي من البروتوكولات التالية يُستخدم في نقل الملفات عبر الإنترنت؟",o:["HTTPS","FTP","SMTP","TCP"],a:1,e:"FTP = File Transfer Protocol لنقل الملفات. HTTPS لتصفح الويب الآمن، SMTP لإرسال البريد، TCP بروتوكول نقل عام."},
+{t:"sec",q:"جميع الطرق التالية تُستخدم لحماية البيانات ما عدا ……",o:["عمل نسخ احتياطية","برنامج مكافح الفيروسات","تنظيم البيانات في أعمدة","تشفير البيانات بكلمة مرور"],a:2,e:"تنظيم البيانات في أعمدة ترتيب للعرض فقط ولا يحميها. النسخ الاحتياطي ومكافح الفيروسات والتشفير كلها وسائل حماية."},
+{t:"sec",q:"أي من التالي له ضرر كبير على المعلومات؟",o:["التشفير","التجزئة","التروجان","السرية"],a:2,e:"التروجان (حصان طروادة) برنامج خبيث يتنكّر في صورة برنامج مفيد ليفتح بابًا خلفيًا للمهاجم. البقية أدوات أو مبادئ حماية."},
+{t:"edu",q:"المعلم حينما ينتقل من الجزء إلى الكل ومن المثال إلى القاعدة، فإن طريقته تُعتبر ……",o:["تراكيبية","استقصائية","استقرائية","استنتاجية"],a:2,e:"الاستقراء: من الأمثلة والجزئيات إلى القاعدة العامة. عكسه الاستنباط: من القاعدة العامة إلى الحالات الخاصة (من الكل إلى الجزء)."},
+{t:"hw",q:"المرحلة الثالثة من مراحل بناء وتطوير نظم المعلومات هي ……",o:["التخطيط","التنفيذ","التحليل","التصميم"],a:3,e:"المراحل بالترتيب: التخطيط ← التحليل ← التصميم ← التنفيذ ← الدعم."},
+{t:"hw",q:"أي من التالي من خوارزميات جدولة المعالج؟",o:["FILO","FCFS","QUEUE","STACK"],a:1,e:"FCFS (من يأتي أولًا يُخدم أولًا) أبسط خوارزميات الجدولة: تُنفَّذ العمليات حسب ترتيب وصولها. FILO وQueue وStack هياكل بيانات."},
+{t:"net",q:`يعمل ${L("DNS")} في طبقة ……`,o:["الشبكة","النقل","التطبيقات","الفيزيائية"],a:2,e:"DNS يحوّل أسماء المواقع (مثل google.com) إلى عناوين IP، وهو بروتوكول في طبقة التطبيقات مثل HTTP وFTP."},
+{t:"hw",q:"أي من الأجهزة التالية يمكن تشغيل الحاسب بدونه؟",o:["كرت الصوت Sound Card","اللوحة الأم Motherboard","مزود الطاقة Power Supply","المعالج CPU"],a:0,e:"كرت الصوت ملحق اختياري يعمل الجهاز بدونه، أما اللوحة الأم ومزود الطاقة والمعالج فلا يعمل الحاسب من دونها."},
+{t:"net",q:`ما نوع البيانات الموجودة في طبقة ${L("Physical Layer")}؟`,o:["Frame","Segment","Packets","Bits"],a:3,e:"وحدة البيانات في كل طبقة: Physical = Bits، Data Link = Frame، Network = Packet، Transport = Segment."},
+{t:"prog",q:"يُستخدم شكل متوازي الأضلاع في مخططات الانسياب من أجل ……",o:["البداية / النهاية","إدخال / إخراج","العمليات","الواصلة"],a:1,e:"متوازي الأضلاع = إدخال/إخراج، البيضاوي = بداية ونهاية، المستطيل = عملية، المعيّن = قرار، الدائرة الصغيرة = واصلة."},
+{t:"hw",q:"اختاري الترتيب الصحيح لوحدات التخزين في المعالج من الأبطأ إلى الأسرع",o:["RAM – Cache – Register","RAM – Register – Cache","Cache – RAM – Register","Register – Cache – RAM"],a:0,ltr:1,e:"كلما اقتربت الذاكرة من المعالج زادت سرعتها: المسجلات Registers داخل المعالج هي الأسرع، تليها الذاكرة المخبئية Cache، ثم RAM."},
+{t:"logic",q:"البوابة الموجودة في الصورة تشير إلى ……",fig:"xnor",o:["XNOR","NOR","NAND","AND"],a:0,e:"الخط المنحني الإضافي عند المداخل يعني XOR، والدائرة الصغيرة عند المخرج تعني نفي. XOR + نفي = XNOR، ويعطي 1 عندما يتساوى المدخلان."},
+{t:"logic",q:"تشير الدائرة التالية إلى ……",fig:"halfsub",o:["الجامع النصفي","الجامع الكلي","الطارح الكلي","الطارح النصفي"],a:3,e:"مدخلان فقط A وB: بوابة XOR تعطي الفرق D، وبوابة AND مع نفي A تعطي الاستلاف B₀ = A′B. وجود النفي هو ما يميّزه عن الجامع النصفي."},
+{t:"edu",q:"عند وضع المعلم خطته للدرس فإن أول ما يتبادر إلى ذهنه ……",o:["كيف يتعلم الطالب","ماذا سيتعلم الطالب","هل سيتعلم الطالب","متى سيتعلم الطالب"],a:1,e:"الخطة تبدأ بالأهداف: ماذا سيتعلم الطالب؟ وبعدها تُختار الطريقة (كيف) وأدوات التقويم."},
+{t:"db",q:"نوع من قواعد البيانات يكون ترتيب البيانات فيه أصل / تابع، وإنشاؤها سهل وتعديلها صعب",o:["الهرمية","العلائقية","الشبكية","الشجرية"],a:0,e:"في النموذج الهرمي يتبع كل سجل أصلًا واحدًا (أب ← أبناء) مثل شجرة العائلة؛ الإنشاء سهل لكن تعديل البنية صعب."},
+{t:"db",q:"قاعدة بيانات سحابية فيها تخزين عام لكل الناس وتخزين خاص بمقابل مالي ……",o:["هجين","مشترك","عام","خاص"],a:0,e:"السحابة الهجينة تجمع النوعين: جزء عام متاح للجميع وجزء خاص مدفوع."},
+{t:"prog",q:"أي من لغات البرمجة التالية سريعة في التواصل مع مكونات الجهاز؟",o:["PHP","Visual Basic","Java","C"],a:3,e:"لغة C قريبة من لغة الآلة وتتعامل مباشرة مع الذاكرة والعتاد، لذلك تُكتب بها أنظمة التشغيل وتعريفات الأجهزة."},
+{t:"hw",q:`عملية جديدة للتنفيذ تُرتَّب حسب أولويتها في ${L("Non-preemptive Priority")}، فإننا نقارن أهميتها ……`,o:["بكل عنصر في الطابور","بأعلى عنصر في الطابور","بالعملية قيد التشغيل","بجميع العناصر في الطابور"],a:1,e:"في الجدولة غير الاستباقية لا تُقاطَع العملية الجارية حتى تنتهي، فتُقارَن العملية الجديدة بأعلى عنصر في طابور الانتظار. أما في الاستباقية فتُقارَن بالعملية قيد التشغيل وقد تقاطعها."},
+{t:"app",q:"الفيديو عبارة عن سلسلة من ……",o:["Frames","Segments","Transition","Packet"],a:0,e:"الفيديو صور (إطارات) متتالية تُعرض بسرعة، مثل 30 إطارًا في الثانية، فتراها العين حركة."},
+{t:"net",q:`يُعتبر البروتوكول ${L("UDP")} ……`,o:["Connection-oriented, reliable","Connectionless, unreliable","Connection-oriented, unreliable","Connectionless, reliable"],a:1,ltr:1,e:"UDP لا ينشئ اتصالًا مسبقًا ولا يضمن وصول البيانات، لكنه سريع؛ يُستخدم في البث المباشر والألعاب. TCP عكسه: موجّه بالاتصال وموثوق."},
+{t:"net",q:`بروتوكول مشاركة الملفات في شبكة ${L("Peer to Peer")} هو ……`,o:["BitTorrent","FTP","TFTP","TCP"],a:0,e:"BitTorrent يوزّع الملف على الأجهزة المشاركة، فيحمّل كل جهاز أجزاء من الآخرين دون خادم مركزي. FTP وTFTP يعتمدان على خادم."},
+{t:"edu",q:"إذا أراد المعلم شرح كتابة نص فقرة في برنامج Word للطلاب، فما أفضل طريقة لذلك؟",o:["الإلقاء","حل المشكلات","المناقشة","المشروع"],a:3,e:"المهارة عملية، فالأنسب أن ينتج الطالب بنفسه فقرة منسّقة ضمن مشروع بدل الاستماع للإلقاء."},
+{t:"logic",q:`أبسط شكل للدالة المنطقية: ${L("Y = AB + A(A+C) + B(A+C)")}`,o:["A + BC","A + B","A′ + BC","AC"],a:0,ltr:1,e:"بالتوزيع: AB + AA + AC + AB + BC، وAA = A فتصبح AB + A + AC + BC = A(B + 1 + C) + BC، و1 + أي شيء = 1، إذن Y = A + BC."},
+{t:"num",q:`معكوس المصفوفة ${M("−1","2","0","3")} هو ……`,o:[M("0","−⅓","−1","⅔"),M("1","2","0","−3"),M("−1","⅔","0","⅓"),M("1","−3","−2","3")],a:2,html:1,e:"المحدد = (−1×3) − (2×0) = −3. بدّلي عنصري القطر الرئيسي واعكسي إشارة الآخرين: [3, −2 ; 0, −1]، ثم اقسمي الكل على −3 فتحصلين على [−1, ⅔ ; 0, ⅓]."},
+{t:"edu",q:"أي مما يلي من أمثلة نظم إدارة التعليم الإلكتروني مفتوحة المصدر؟",o:["بلاك بورد Blackboard","مجد","أتوتر ATutor","تدارس"],a:2,e:"ATutor نظام إدارة تعلم مفتوح المصدر مثل Moodle، بينما Blackboard نظام تجاري مغلق المصدر."},
+{t:"app",q:`في برنامج Excel تُعتبر ${L("NOT")} تتبع الدوال ……`,o:["المنطقية","الرياضية","الإحصائية","الشرطية"],a:0,e:"NOT وAND وOR وIF دوال منطقية في Excel. NOT تعكس القيمة: TRUE تصبح FALSE والعكس."},
+{t:"num",q:`ما ناتج تحويل الرقم الثنائي ${L("(011001)₂")} إلى النظام العشري؟`,o:["20","23","25","28"],a:2,e:"اضربي كل خانة في قيمتها من اليمين: 1×1 + 0×2 + 0×4 + 1×8 + 1×16 + 0×32 = 25."},
+{t:"num",q:`حوّلي العدد ${L("(25)₁₀")} من النظام العشري إلى الثنائي`,o:["11001","10011","11010","1000100"],a:0,ltr:1,e:"اقسمي على 2 واكتبي البواقي من الأسفل للأعلى: 25←1، 12←0، 6←0، 3←1، 1←1، فالناتج 11001. تحقّقي: 16 + 8 + 1 = 25. (تنبيه: الإجابة 1000100 المعتمدة في بعض نسخ التجميعات خاطئة، فهي تساوي 68.)"},
+{t:"num",q:"النظام الثماني يشتمل على الأرقام ……",o:["0 – 8","0 – 7","1 – 7","1 – 8"],a:1,ltr:1,e:"أي نظام أساسه n يستخدم الأرقام من 0 إلى n−1: الثماني 0–7، الثنائي 0–1، السادس عشر 0–9 ثم A–F."},
+{t:"prog",q:"ما ناتج تنفيذ الكود التالي؟",code:`int sum = 0;\nint x = 11;\n\ndo\n{\n    sum = sum + x;\n    x++;\n} while (x <= 10);\n\nMessageBox.Show("Sum = " + sum);`,o:["10","11","0","1"],a:1,e:"do-while ينفّذ الجسم مرة واحدة على الأقل قبل فحص الشرط: sum = 0 + 11 = 11، ثم x = 12، والشرط 12 <= 10 خاطئ فتتوقف الحلقة. الناتج Sum = 11."},
+{t:"app",q:"يتيح برنامج Word تصحيح الأخطاء الإملائية، حيث يظهر تحتها خط باللون ……",o:["الأحمر","الأسود","الأخضر","الأزرق"],a:0,e:"الخط الأحمر المتعرّج = خطأ إملائي، والأزرق (أو الأخضر في الإصدارات القديمة) = خطأ نحوي."},
+{t:"net",q:`ما هو ${L("ISDN")}؟`,o:["Integrated Standard Digital Network","Interactive Standard Dynamic Network","Integrated Services Digital Network","Internet Services Data Network"],a:2,ltr:1,e:"ISDN شبكة رقمية متكاملة الخدمات تنقل الصوت والبيانات عبر خطوط الهاتف، وتعمل في طبقة ربط البيانات."},
+{t:"app",q:`اختصار ${L("RTF")}`,o:["Rich Text Format","Research Text Format","Rich Text Factory","Rich Type Format"],a:0,ltr:1,e:"RTF تنسيق نص غني يحفظ الخط واللون والتنسيق، ويُفتح في معظم برامج معالجة النصوص."},
+{t:"net",q:"الصورة التالية تشير إلى أي تصنيف من تصنيفات الشبكات؟",fig:"star",o:["Ring","Star","Bus","Mesh"],a:1,e:"كل الأجهزة متصلة بجهاز مركزي واحد (Switch) = نجمية. الحلقية دائرة مغلقة، الخطية كابل رئيسي واحد، الشبكية كل جهاز متصل بالجميع."},
+{t:"db",q:`لحذف قاعدة البيانات في ${L("SQL")} نستخدم الأمر ……`,o:["DELETE","REMOVE","ERASE","DROP"],a:3,e:"DROP DATABASE MyDatabase; يحذف القاعدة كاملة، وCREATE DATABASE ينشئها. DELETE يحذف سجلات داخل جدول فقط."},
+{t:"logic",q:"دائرة منطقية لها عدة أطراف دخل وطرف خرج واحد",o:["المشفر Encoder","الدامج MUX","موزع البيانات DEMUX","محلل الشفرة Decoder"],a:1,e:"MUX (منتقي البيانات) يختار مدخلًا واحدًا من عدة مداخل ويمرّره إلى مخرج واحد بواسطة خطوط الاختيار. DEMUX عكسه: مدخل واحد إلى عدة مخارج."},
+{t:"prog",q:"أسهل أنواع هياكل البيانات من حيث إضافة عنصر ……",o:["Stack","Queue","Linked List","Array"],a:2,e:"في القائمة المترابطة تكفي إضافة عقدة وتعديل مؤشر، دون إزاحة العناصر أو حجم ثابت كما في المصفوفة، ودون قيد الإضافة من طرف واحد كما في Stack وQueue."},
+{t:"prog",q:`الجزء المظلل في ${L("node")} هو ……`,fig:"linked",o:["Data","NULL","public","Pointer"],a:3,e:"كل عقدة من جزأين: البيانات Data والمؤشر Pointer (next) الذي يشير للعقدة التالية، ومؤشر آخر عقدة = NULL."},
+{t:"net",q:`عدد الخانات في عنوان ${L("IPv6")} ……`,o:["2","4","6","8"],a:3,e:"IPv6 طوله 128 بت مقسّم إلى 8 خانات بالنظام السادس عشر (كل خانة 16 بت). أما IPv4 فطوله 32 بت في 4 خانات."},
+{t:"edu",q:"أحد معايير تطوير المحتوى، ويمثّل واجهة بين نظام إدارة التعلم والمحتوى ……",o:["LMS","SCORM","CMS","LCMS"],a:1,e:"SCORM مجموعة معايير تجعل المحتوى التعليمي ينتقل بين أنظمة إدارة التعلم، وتسجّل نتائج المتعلم والمدة التي قضاها."},
+{t:"net",q:"يُعتبر التشفير موجودًا في طبقة ……",o:["Presentation","Data Link","Network","Transport"],a:0,e:"طبقة العرض Presentation (السادسة) مسؤولة عن التشفير والضغط وتحويل الصيغ مثل JPEG وASCII."},
+{t:"net",q:`جهاز ${L("Switch")} يُستخدم في طبقة ……`,o:["Presentation","Data Link","Network","Transport"],a:1,e:"السويتش يقرأ العنوان المادي MAC ليوصل الإطار للجهاز الصحيح، لذلك يعمل في طبقة ربط البيانات (الثانية). الراوتر يعمل في طبقة الشبكة."},
+{t:"app",q:"الدالة التي تُستخدم لحساب عدد الخلايا الفارغة في Excel ……",o:["COUNT","COUNTA","COUNTIF","COUNTBLANK"],a:3,e:"COUNTBLANK تعدّ الخلايا الفارغة. COUNT تعدّ الأرقام، COUNTA تعدّ غير الفارغة، COUNTIF تعدّ ما يحقق شرطًا."},
+{t:"db",q:"يشير الرمز التالي في مخطط الكيان والعلاقة (ER) إلى ……",fig:"dashed",o:["صفة متعددة القيم","صفة مشتقة","صفة مركبة","صفة فريدة"],a:1,e:"البيضاوي المتقطع = صفة مشتقة تُحسب من صفة أخرى، مثل العمر من تاريخ الميلاد. البيضاوي المزدوج = متعددة القيم، والتسطير = المفتاح الأساسي."},
+{t:"net",q:"ما الكيبل المستخدم في قنوات التلفزيون؟",o:["المحوري","المزدوج","المعزول","غير المعزول"],a:0,e:"الكابل المحوري Coaxial صُمّم لنقل البث التلفزيوني. المزدوج المجدول (المعزول وغير المعزول) يُستخدم في شبكات الحاسب."}
+];
+Q.forEach((x,i)=>x.id=i);
+
+const LET=["أ","ب","ج","د"];
+const $=id=>document.getElementById(id);
+const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+const blank=s=>s.replace(/……/g,'<span class="blank" aria-label="فراغ"></span>');
+
+let cfg={mode:"practice",count:0,topics:new Set(Object.keys(TOPICS)),shuffle:true};
+let S=null; // session
+
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+
+function renderTopics(){
+  const box=$("topics");box.innerHTML="";
+  Object.entries(TOPICS).forEach(([k,v])=>{
+    const n=Q.filter(q=>q.t===k).length;
+    const b=document.createElement("button");b.className="chip";b.setAttribute("aria-pressed",cfg.topics.has(k));
+    b.innerHTML=`${v}<span class="n">${n}</span>`;
+    b.onclick=()=>{cfg.topics.has(k)?cfg.topics.delete(k):cfg.topics.add(k);renderTopics()};
+    box.appendChild(b)});
+  const pool=Q.filter(q=>cfg.topics.has(q.t)).length;
+  $("poolNote").textContent=pool?`الأسئلة المتاحة في المحاور المختارة: ${pool}`:"اختاري محورًا واحدًا على الأقل.";
+  $("startBtn").disabled=!pool;
+}
+function seg(btns,fn){btns.forEach(b=>b.onclick=()=>{btns.forEach(x=>x.setAttribute("aria-pressed","false"));b.setAttribute("aria-pressed","true");fn(b)})}
+seg([$("m-practice"),$("m-exam")],b=>cfg.mode=b.id==="m-exam"?"exam":"practice");
+seg([...$("countSeg").querySelectorAll("button")],b=>cfg.count=+b.dataset.c);
+$("shuffle").onchange=e=>cfg.shuffle=e.target.checked;
+
+function start(list){
+  let qs=list||Q.filter(q=>cfg.topics.has(q.t));
+  if(cfg.shuffle)qs=shuffle(qs);
+  if(!list&&cfg.count&&cfg.count<qs.length)qs=qs.slice(0,cfg.count);
+  S={items:qs.map(q=>({q,order:cfg.shuffle?shuffle([0,1,2,3]):[0,1,2,3],ans:null})),i:0,mode:cfg.mode,t0:Date.now()};
+  show("quiz");render();
+}
+function show(id){["setup","quiz","result"].forEach(s=>$(s).hidden=s!==id);window.scrollTo({top:0})}
+
+function render(){
+  const it=S.items[S.i],q=it.q,n=S.items.length,practice=S.mode==="practice";
+  $("qnum").textContent=`السؤال ${S.i+1} من ${n}`;
+  $("qtag").textContent=TOPICS[q.t];
+  const answered=S.items.filter(x=>x.ans!==null).length;
+  const right=S.items.filter(x=>x.ans===x.q.a).length;
+  $("live").textContent=practice?`صحيح ${right} / ${answered}`:`أُجيب ${answered} / ${n}`;
+  $("prog").style.width=(answered/n*100)+"%";
+  $("qtext").innerHTML=blank(q.q);
+  $("qextra").innerHTML=(q.fig?`<div class="fig">${FIG[q.fig]}</div>`:"")+(q.code?`<pre class="code">${q.code.replace(/</g,"&lt;")}</pre>`:"");
+  const ul=$("opts");ul.innerHTML="";
+  const locked=practice&&it.ans!==null;
+  it.order.forEach((oi,pos)=>{
+    const li=document.createElement("li");const b=document.createElement("button");b.className="opt";
+    const txt=q.html?q.o[oi]:(q.ltr||/^[A-Za-z0-9 ,.\-–'′+()]+$/.test(q.o[oi])?`<span class="ltr" style="font-size:1em">${q.o[oi]}</span>`:q.o[oi]);
+    b.innerHTML=`<span class="bub">${LET[pos]}</span><span class="otext">${txt}</span>`;
+    if(it.ans===oi)b.classList.add("sel");
+    if(locked){b.disabled=true;if(oi===q.a)b.className="opt right";else if(it.ans===oi)b.className="opt wrong"}
+    b.onclick=()=>choose(oi);
+    li.appendChild(b);ul.appendChild(li)});
+  const fb=$("fb");
+  if(locked){const ok=it.ans===q.a;fb.innerHTML=`<div class="fb ${ok?"ok":"no"}"><strong>${ok?"إجابة صحيحة، أحسنتِ":"الإجابة الصحيحة: "+(q.html?"":q.o[q.a])}</strong>${q.html&&!ok?`<div style="margin:4px 0 8px">${q.o[q.a]}</div>`:""}<p>${q.e}</p></div>`}else fb.innerHTML="";
+  $("prevBtn").disabled=S.i===0;
+  const last=S.i===n-1;
+  $("nextBtn").textContent=last?"عرض النتيجة":"التالي";
+  $("nextBtn").disabled=practice&&it.ans===null&&!last?false:false;
+  // map
+  const map=$("map");map.innerHTML="";
+  S.items.forEach((x,k)=>{const m=document.createElement("button");m.textContent=k+1;m.setAttribute("aria-label",`السؤال ${k+1}`);
+    if(x.ans!==null)m.classList.add(practice?(x.ans===x.q.a?"g":"b"):"done");if(k===S.i)m.classList.add("cur");
+    m.onclick=()=>{S.i=k;render()};map.appendChild(m)});
+}
+function choose(oi){const it=S.items[S.i];if(S.mode==="practice"&&it.ans!==null)return;it.ans=oi;render()}
+$("prevBtn").onclick=()=>{if(S.i>0){S.i--;render()}};
+$("nextBtn").onclick=()=>{if(S.i<S.items.length-1){S.i++;render();$("qtext").scrollIntoView({block:"nearest"})}else finish()};
+$("endBtn").onclick=finish;
+document.addEventListener("keydown",e=>{if($("quiz").hidden)return;const k="1234".indexOf(e.key);
+  if(k>-1){const it=S.items[S.i];choose(it.order[k])}else if(e.key==="Enter"&&!(e.target.tagName==="BUTTON")){$("nextBtn").click()}});
+
+function finish(){
+  const n=S.items.length,right=S.items.filter(x=>x.ans===x.q.a).length,pct=Math.round(right/n*100);
+  $("rScore").textContent=pct+"%";
+  const mins=Math.max(1,Math.round((Date.now()-S.t0)/60000));
+  $("rOf").textContent=`${right} من ${n} إجابة صحيحة · ${mins} دقيقة`;
+  $("rVerdict").textContent=pct>=90?"ممتاز! أنتِ جاهزة لهذا النوع من الأسئلة.":pct>=70?"أداء جيد جدًا، راجعي الأخطاء أدناه لتثبيت المعلومة.":pct>=50?"بداية جيدة. ركّزي على المحاور الأقل نسبة ثم أعيدي المحاولة.":"لا بأس، اقرئي الشرح لكل خطأ ثم تدرّبي على الأخطاء فقط.";
+  const bars=$("rBars");bars.innerHTML="";
+  Object.keys(TOPICS).forEach(k=>{const xs=S.items.filter(x=>x.q.t===k);if(!xs.length)return;const r=xs.filter(x=>x.ans===x.q.a).length;
+    bars.insertAdjacentHTML("beforeend",`<div class="bar"><span class="t">${TOPICS[k]}</span><span class="track"><i style="width:${r/xs.length*100}%"></i></span><span class="v">${r}/${xs.length}</span></div>`)});
+  const wrong=S.items.filter(x=>x.ans!==x.q.a);
+  $("revTitle").textContent=wrong.length?`مراجعة الأخطاء (${wrong.length})`:"لا توجد أخطاء، عمل رائع!";
+  $("rev").innerHTML=wrong.map(x=>{const q=x.q;return `<li><p class="q">${blank(q.q)}</p>${q.fig?`<div class="fig">${FIG[q.fig]}</div>`:""}<p class="a">إجابتك: <span class="bad">${x.ans===null?"لم تُجب":q.o[x.ans]}</span> · الصحيحة: <span class="good">${q.o[q.a]}</span></p><p class="e">${q.e}</p></li>`}).join("");
+  $("retryWrong").hidden=!wrong.length;
+  S.wrong=wrong.map(x=>x.q);
+  const best=+store.get("best1446")||0;if(pct>best&&n>=10)store.set("best1446",pct);
+  show("result");showBest();
+}
+$("retryWrong").onclick=()=>start(S.wrong);
+$("retryAll").onclick=()=>start(S.items.map(x=>x.q));
+$("toSetup").onclick=()=>{show("setup");renderTopics()};
+$("startBtn").onclick=()=>start();
+function showBest(){const b=store.get("best1446");$("best").textContent=b?`أفضل نتيجة سابقة: ${b}%`:""}
+renderTopics();showBest();
+</script>
+</body>
+</html>
